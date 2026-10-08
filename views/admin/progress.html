@@ -1,0 +1,83 @@
+<load target="./admin.css" />
+<div class="svl-admin">
+    <div class="svl-header"><div><span class="svl-eyebrow">Simple Video Learning · Administration</span><h1>수강생 · 진도</h1><p>수강생별 학습 현황과 강의별 진도를 확인합니다.</p></div></div>
+    <ul class="svl-tabs"><li class="is-active"|cond="$act === 'dispSimple_video_learningAdminConfig'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}">API · 기본 설정</a></li><li class="is-active"|cond="$act === 'dispSimple_video_learningAdminCourses'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리</a></li><li class="is-active"|cond="$act === 'dispSimple_video_learningAdminProgress'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress')}">수강생 · 진도</a></li><li class="is-active"|cond="$act === 'dispSimple_video_learningAdminApiGuide'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminApiGuide')}">API 가이드</a></li></ul>
+
+
+<form action="./" method="get" class="x_form-inline" style="margin:20px 0">
+    <input type="hidden" name="module" value="admin" />
+    <input type="hidden" name="act" value="dispSimple_video_learningAdminProgress" />
+    <select name="course_srl" onchange="this.form.submit()">
+        <option value="">수업 선택</option>
+        <option loop="$simple_video_learning_courses=>$course" value="{$course->course_srl}" selected="selected"|cond="$simple_video_learning_selected_course && $simple_video_learning_selected_course->course_srl == $course->course_srl">
+            {$course->course_code} - {$course->title}
+        </option>
+    </select>
+</form>
+
+<div class="x_alert x_alert-info" cond="$simple_video_learning_selected_course">
+    <strong>{$simple_video_learning_selected_course->title}</strong> · 수강생 {count($simple_video_learning_progress_rows)}명
+</div>
+
+<table class="x_table x_table-striped" cond="$simple_video_learning_selected_course">
+    <thead>
+        <tr>
+            <th>회원</th>
+            <th>신청일</th>
+            <th>완료 강의</th>
+            <th>전체 진도</th>
+            <th>마지막 학습</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr loop="$simple_video_learning_progress_rows=>$row">
+            <td>
+                <strong>{$row->member->nick_name}</strong><br />
+                <small>{$row->member->user_id} / #{$row->member->member_srl}</small>
+            </td>
+            <td>{zdate($row->enrollment->regdate, 'Y-m-d H:i')}</td>
+            <td>{$row->completed_count} / {$row->lecture_count}</td>
+            <td style="min-width:180px">
+                <div style="height:8px;background:#eee;border-radius:99px;overflow:hidden">
+                    <div style="height:100%;width:{$row->percentage}%;background:#5b5cf0"></div>
+                </div>
+                <small>{$row->percentage}%</small>
+            </td>
+            <td>
+                <span cond="$row->last_heartbeat">{zdate($row->last_heartbeat, 'Y-m-d H:i')}</span>
+                <span cond="!$row->last_heartbeat">학습 기록 없음</span>
+            </td>
+            <td>
+                <a class="x_btn x_btn-small" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress', 'course_srl', $simple_video_learning_selected_course->course_srl, 'member_srl', $row->member->member_srl)}">상세</a>
+            </td>
+        </tr>
+        <tr cond="!$simple_video_learning_progress_rows">
+            <td colspan="6">현재 수강신청한 회원이 없습니다.</td>
+        </tr>
+    </tbody>
+</table>
+
+<div cond="$simple_video_learning_selected_member" style="margin-top:30px">
+    <h2>{$simple_video_learning_selected_member->nick_name}님의 강의별 진도</h2>
+    <table class="x_table x_table-striped">
+        <thead><tr><th>주차</th><th>강의</th><th>진도</th><th>상태</th><th>마지막 학습</th></tr></thead>
+        <tbody>
+            <tr loop="$simple_video_learning_selected_details=>$detail">
+                <td>{$detail->lecture->week_no}주차</td>
+                <td>{$detail->lecture->display_title}</td>
+                <td>{$detail->percentage}%</td>
+                <td>
+                    <span cond="$detail->completed" class="x_label x_label-success">완료</span>
+                    <span cond="!$detail->completed" class="x_label">학습중</span>
+                </td>
+                <td>
+                    <span cond="$detail->progress">{zdate($detail->progress->last_heartbeat, 'Y-m-d H:i')}</span>
+                    <span cond="!$detail->progress">-</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</div>

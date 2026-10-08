@@ -1,0 +1,88 @@
+<load target="./admin.css" />
+<div class="svl-admin">
+<div class="svl-header"><div><span class="svl-eyebrow">Simple Video Learning · Administration</span><h1>강의 배정</h1><p>기존 강의를 수업의 주차별 섹션에 할당합니다.</p></div></div>
+<ul class="svl-tabs">
+<li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}">API · 기본 설정</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminCourses' || $act === 'dispSimple_video_learningAdminCourseCreate' || $act === 'dispSimple_video_learningAdminCourseDetail' || $act === 'dispSimple_video_learningAdminLectureAssignments'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리</a></li>
+<li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress')}">수강생 · 진도</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminApiGuide'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminApiGuide')}">API 가이드</a></li></ul>
+<nav class="svl-course-nav" aria-label="수업 관리 메뉴"><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 목록</a><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourseCreate')}">+ 새 수업</a><a class="is-active" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminLectureAssignments')}">강의 배정</a></nav>
+<section class="svl-card"><div class="svl-card-header"><h2>강의 및 주차 배정</h2><p>강의를 선택하고 수업과 주차를 지정한 뒤 저장합니다.</p></div><div class="svl-table-wrap">
+<table class="x_table x_table-striped">
+    <thead><tr><th>강의</th><th>수업</th><th>섹션</th><th>순서</th><th></th></tr></thead>
+    <tbody>
+        <tr loop="$simple_video_learning_lectures=>$lecture">
+            <td>{$lecture->display_title}<br /><small>{$lecture->external_id}</small></td>
+            <td colspan="4">
+                <form action="./" method="post" class="x_form-inline">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="module" value="admin" />
+                    <input type="hidden" name="act" value="procSimple_video_learningAdminAssignLecture" />
+                    <input type="hidden" name="document_srl" value="{$lecture->document_srl}" />
+                    <input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}" />
+                    <select name="course_srl" class="simple_video_learning-admin-course-select">
+                        <option value="0">미배정</option>
+                        <option loop="$simple_video_learning_courses=>$course" value="{$course->course_srl}" data-sections="{$course->num_sections ? $course->num_sections : 15}" selected="selected"|cond="$lecture->course_srl == $course->course_srl">{$course->title}</option>
+                    </select>
+                    <select name="week_no" class="simple_video_learning-admin-section-select" data-current="{$lecture->week_no ? $lecture->week_no : 1}">
+                        <option value="1">1주차</option>
+                    </select>
+                    <input type="number" name="sort_order" min="0" value="{$lecture->sort_order}" style="width:70px" />
+                    <button class="x_btn x_btn-small" type="submit">배정</button>
+                </form>
+                <form action="./" method="post" style="display:inline-block;margin-left:6px" onsubmit="return confirm('이 강의와 영상, 진도 기록을 삭제할까요?');">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="module" value="admin" />
+                    <input type="hidden" name="act" value="procSimple_video_learningDeleteLecture" />
+                    <input type="hidden" name="document_srl" value="{$lecture->document_srl}" />
+                    <input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}" />
+                    <button class="x_btn x_btn-danger x_btn-small" type="submit">강의 삭제</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+(function(){
+    var forms = document.querySelectorAll('form .simple_video_learning-admin-course-select');
+    Array.prototype.forEach.call(forms, function(courseSelect){
+        var form = courseSelect.form;
+        var sectionSelect = form ? form.querySelector('.simple_video_learning-admin-section-select') : null;
+        if (!sectionSelect) return;
+
+        function refreshSections() {
+            var selected = courseSelect.options[courseSelect.selectedIndex];
+            var count = selected ? parseInt(selected.getAttribute('data-sections') || '0', 10) : 0;
+            var current = parseInt(sectionSelect.getAttribute('data-current') || '1', 10);
+            sectionSelect.innerHTML = '';
+
+            if (!courseSelect.value || count <= 0) {
+                var none = document.createElement('option');
+                none.value = '1';
+                none.textContent = '-';
+                sectionSelect.appendChild(none);
+                sectionSelect.disabled = true;
+                return;
+            }
+
+            sectionSelect.disabled = false;
+            for (var i = 1; i <= count; i++) {
+                var option = document.createElement('option');
+                option.value = String(i);
+                option.textContent = i + '주차';
+                if (i === current) option.selected = true;
+                sectionSelect.appendChild(option);
+            }
+        }
+
+        courseSelect.addEventListener('change', function(){
+            sectionSelect.setAttribute('data-current', '1');
+            refreshSections();
+        });
+        refreshSections();
+    });
+})();
+</script>
+
+</div></section></div>

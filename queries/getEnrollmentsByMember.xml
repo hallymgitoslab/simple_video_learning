@@ -1,0 +1,8 @@
+<query id="getEnrollmentsByMember" action="select">
+    <tables><table name="simple_video_learning_enrollments" /></tables>
+    <columns><column name="*" /></columns>
+    <conditions>
+        <condition operation="equal" column="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <condition operation="equal" column="active" var="active" default="Y" pipe="and" />
+    </conditions>
+</query>

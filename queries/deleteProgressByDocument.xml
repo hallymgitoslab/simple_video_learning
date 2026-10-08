@@ -1,0 +1,6 @@
+<query id="deleteProgressByDocument" action="delete">
+    <tables><table name="simple_video_learning_progress" /></tables>
+    <conditions>
+        <condition operation="equal" column="document_srl" var="document_srl" filter="number" notnull="notnull" />
+    </conditions>
+</query>

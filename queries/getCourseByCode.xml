@@ -1,0 +1,7 @@
+<query id="getCourseByCode" action="select">
+    <tables><table name="simple_video_learning_courses" /></tables>
+    <columns><column name="*" /></columns>
+    <conditions>
+        <condition operation="equal" column="course_code" var="course_code" notnull="notnull" />
+    </conditions>
+</query>

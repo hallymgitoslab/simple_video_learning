@@ -1,0 +1,74 @@
+<load target="./style.css" />
+
+<div class="simple_video_learning-shell">
+    <header class="simple_video_learning-topbar">
+        <a class="simple_video_learning-brand" href="{getUrl('', 'mid', $simple_video_learning_mid)}">
+            <span class="simple_video_learning-brand-mark">LMS</span>
+            <span><strong>출석·수강기록</strong><small>{$simple_video_learning_course->title}</small></span>
+        </a>
+        <nav class="simple_video_learning-topnav">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}">수업</a>
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningManageCourse', 'course_srl', $simple_video_learning_course->course_srl)}">운영</a>
+            <a class="is-active" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourseAttendance', 'course_srl', $simple_video_learning_course->course_srl)}">출석·수강기록</a>
+        </nav>
+    </header>
+
+    <main class="simple_video_learning-main">
+        <section class="simple_video_learning-section-head">
+            <div>
+                <span class="simple_video_learning-section-label">ATTENDANCE & LEARNING RECORDS</span>
+                <h1>{$simple_video_learning_course->title}</h1>
+            </div>
+            <span class="simple_video_learning-section-note">승인된 수강생 {count($simple_video_learning_attendance_rows)}명</span>
+        </section>
+
+        <section class="simple_video_learning-attendance-card">
+            <div class="simple_video_learning-attendance-table-wrap">
+                <table class="simple_video_learning-attendance-table">
+                    <thead>
+                        <tr><th>수강생</th><th>학습 시작</th><th>완료 강의</th><th>총 진도율</th><th>총 시청시간</th><th>마지막 학습</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr loop="$simple_video_learning_attendance_rows=>$row">
+                            <td><strong>{$row->member->nick_name}</strong><small>{$row->member->user_id}</small></td>
+                            <td>{$row->started_count} / {$row->lecture_count}</td>
+                            <td>{$row->completed_count} / {$row->lecture_count}</td>
+                            <td><div class="simple_video_learning-attendance-progress"><i style="width:{$row->percentage}%"></i></div><small>{$row->percentage}%</small></td>
+                            <td>{floor($row->watched_seconds / 60)}분</td>
+                            <td><span cond="$row->last_heartbeat">{zdate($row->last_heartbeat, 'Y-m-d H:i')}</span><span cond="!$row->last_heartbeat">기록 없음</span></td>
+                            <td><a class="simple_video_learning-attendance-detail" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourseAttendance', 'course_srl', $simple_video_learning_course->course_srl, 'member_srl', $row->member->member_srl)}">상세</a></td>
+                        </tr>
+                        <tr cond="!$simple_video_learning_attendance_rows"><td colspan="7" class="simple_video_learning-attendance-empty">승인된 수강생이 없습니다.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="simple_video_learning-attendance-card" cond="$simple_video_learning_selected_member">
+            <div class="simple_video_learning-attendance-detail-head">
+                <div><span class="simple_video_learning-section-label">LEARNER DETAIL</span><h2>{$simple_video_learning_selected_member->nick_name}님의 강의별 수강기록</h2><small>{$simple_video_learning_selected_member->user_id}</small></div>
+            </div>
+            <div class="simple_video_learning-attendance-table-wrap">
+                <table class="simple_video_learning-attendance-table">
+                    <thead><tr><th>주차</th><th>강의</th><th>상태</th><th>시청시간</th><th>영상길이</th><th>진도율</th><th>첫 학습</th><th>마지막 학습</th></tr></thead>
+                    <tbody>
+                        <tr loop="$simple_video_learning_selected_details=>$detail">
+                            <td>{$detail->lecture->week_no}주차</td>
+                            <td><strong>{$detail->lecture->display_title}</strong></td>
+                            <td>
+                                <span class="simple_video_learning-attendance-status is-completed" cond="$detail->status === 'completed'">출석완료</span>
+                                <span class="simple_video_learning-attendance-status is-progress" cond="$detail->status === 'in_progress'">수강중</span>
+                                <span class="simple_video_learning-attendance-status" cond="$detail->status === 'not_started'">미수강</span>
+                            </td>
+                            <td>{floor($detail->watched_seconds / 60)}분 {$detail->watched_seconds % 60}초</td>
+                            <td>{floor($detail->duration / 60)}분 {$detail->duration % 60}초</td>
+                            <td><div class="simple_video_learning-attendance-progress"><i style="width:{$detail->percentage}%"></i></div><small>{$detail->percentage}%</small></td>
+                            <td><span cond="$detail->progress">{zdate($detail->progress->regdate, 'Y-m-d H:i')}</span><span cond="!$detail->progress">-</span></td>
+                            <td><span cond="$detail->progress">{zdate($detail->progress->last_heartbeat, 'Y-m-d H:i')}</span><span cond="!$detail->progress">-</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>

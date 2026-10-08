@@ -1,0 +1,7 @@
+<query id="getCourses" action="select">
+    <tables><table name="simple_video_learning_courses" /></tables>
+    <columns><column name="*" /></columns>
+    <navigation>
+        <index var="sort_index" default="course_srl" order="desc" />
+    </navigation>
+</query>

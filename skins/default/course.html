@@ -1,0 +1,177 @@
+<load target="./style.css" />
+
+<div class="simple_video_learning-shell" data-simple_video_learning-module-srl="{$module_info->module_srl}">
+    <header class="simple_video_learning-topbar">
+        <nav class="simple_video_learning-topnav" aria-label="Simple Video Learning 메뉴">
+            <a class="is-active" href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <a cond="$simple_video_learning_can_manage_course" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningManageCourse', 'course_srl', $simple_video_learning_course->course_srl)}">수업 운영</a>
+            <a cond="$simple_video_learning_can_upload" class="simple_video_learning-topnav-primary" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningUpload')}">
+                <span>＋</span> 영상 업로드
+            </a>
+        </nav>
+    </header>
+
+    <main class="simple_video_learning-main">
+        <nav class="simple_video_learning-breadcrumb" aria-label="breadcrumb">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <span>›</span>
+            <strong>{$simple_video_learning_course->title}</strong>
+        </nav>
+
+        <section class="simple_video_learning-course-hero">
+            <div class="simple_video_learning-course-hero-copy">
+                <span class="simple_video_learning-course-code">{$simple_video_learning_course->course_code}</span>
+                <h1>{$simple_video_learning_course->title}</h1>
+                <p>{$simple_video_learning_course->description ? $simple_video_learning_course->description : '주차별 강의를 선택하여 학습을 시작하세요.'}</p>
+                <div class="simple_video_learning-course-summary">
+                    <span><b>{count($simple_video_learning_weeks)}</b> 주차</span>
+                    <span>영상 진도 자동 저장</span>
+                </div>
+            </div>
+            <div class="simple_video_learning-course-hero-art" aria-hidden="true">
+                <span class="simple_video_learning-orbit simple_video_learning-orbit-one"></span>
+                <span class="simple_video_learning-orbit simple_video_learning-orbit-two"></span>
+                <strong>AI</strong>
+            </div>
+        </section>
+
+        <section class="simple_video_learning-enrollment-panel" cond="$simple_video_learning_enrollment_required || $simple_video_learning_enrollment_status === 'suspended'">
+            <div cond="$simple_video_learning_can_learn">
+                <span class="simple_video_learning-enrollment-icon is-active">✓</span>
+                <div>
+                    <strong>{$simple_video_learning_is_enrolled ? '수강중인 수업입니다' : '수업 운영 권한으로 열람 중입니다'}</strong>
+                    <p>강의를 선택하면 시청 진도가 자동으로 저장됩니다.</p>
+                </div>
+                <form cond="$simple_video_learning_is_enrolled" action="./" method="post">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningUnenroll" />
+                    <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                    <input type="hidden" name="success_return_url" value="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}" />
+                    <button type="submit" class="simple_video_learning-enrollment-secondary">수강취소</button>
+                </form>
+                <a cond="$simple_video_learning_can_manage_course" class="simple_video_learning-enrollment-primary" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningManageCourse', 'course_srl', $simple_video_learning_course->course_srl)}">수업 운영</a>
+            </div>
+
+            <div cond="!$simple_video_learning_can_learn && $simple_video_learning_enrollment_status === 'pending'">
+                <span class="simple_video_learning-enrollment-icon is-pending">…</span>
+                <div>
+                    <strong>수강 승인 대기 중입니다</strong>
+                    <p>교수 또는 조교가 신청을 승인하면 강의를 학습할 수 있습니다.</p>
+                </div>
+                <form action="./" method="post">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningUnenroll" />
+                    <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                    <input type="hidden" name="success_return_url" value="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}" />
+                    <button type="submit" class="simple_video_learning-enrollment-secondary">신청 취소</button>
+                </form>
+            </div>
+
+            <div cond="!$simple_video_learning_can_learn && $simple_video_learning_enrollment_mode === 'closed' && $simple_video_learning_enrollment_status !== 'suspended'">
+                <span class="simple_video_learning-enrollment-icon">×</span>
+                <div>
+                    <strong>현재 수강신청이 닫혀 있습니다</strong>
+                    <p>교수 또는 조교가 수강생을 직접 등록하는 수업입니다.</p>
+                </div>
+            </div>
+
+            <div cond="!$simple_video_learning_can_learn && $simple_video_learning_enrollment_status === 'suspended'">
+                <span class="simple_video_learning-enrollment-icon">×</span>
+                <div><strong>수강이 정지되어 있습니다</strong><p>교수 또는 조교에게 문의하세요.</p></div>
+            </div>
+
+            <div cond="!$simple_video_learning_can_learn && $simple_video_learning_enrollment_status !== 'pending' && $simple_video_learning_enrollment_status !== 'suspended' && $simple_video_learning_enrollment_mode !== 'closed'">
+                <span class="simple_video_learning-enrollment-icon">＋</span>
+                <div>
+                    <strong cond="$simple_video_learning_enrollment_status === 'rejected'">수강신청이 거절되었습니다</strong>
+                    <strong cond="$simple_video_learning_enrollment_status !== 'rejected'">{$simple_video_learning_logged_in ? '수강신청 후 학습할 수 있습니다' : '로그인 후 수강신청할 수 있습니다'}</strong>
+                    <p cond="$simple_video_learning_enrollment_mode === 'approval'">신청 후 교수 또는 조교의 승인이 필요합니다.</p>
+                    <p cond="$simple_video_learning_enrollment_mode === 'auto'">신청 즉시 수강이 승인됩니다.</p>
+                </div>
+                <form cond="$simple_video_learning_logged_in" action="./" method="post">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningEnroll" />
+                    <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                    <input type="hidden" name="success_return_url" value="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}" />
+                    <button type="submit" class="simple_video_learning-enrollment-primary">{$simple_video_learning_enrollment_status === 'rejected' ? '다시 신청' : '수강신청'}</button>
+                </form>
+                <a cond="!$simple_video_learning_logged_in" class="simple_video_learning-enrollment-primary" href="{$simple_video_learning_login_url}">로그인</a>
+            </div>
+        </section>
+
+        <section class="simple_video_learning-enrollment-panel simple_video_learning-open-login-panel" cond="$simple_video_learning_enrollment_mode === 'open' && !$simple_video_learning_can_learn && $simple_video_learning_enrollment_status !== 'suspended'">
+            <div>
+                <span class="simple_video_learning-enrollment-icon">→</span>
+                <div>
+                    <strong>로그인하면 바로 학습할 수 있습니다</strong>
+                    <p>이 수업은 별도의 수강승인 없이 로그인 회원에게 공개됩니다.</p>
+                </div>
+                <a class="simple_video_learning-enrollment-primary" href="{$simple_video_learning_login_url}">로그인</a>
+            </div>
+        </section>
+
+        <div class="simple_video_learning-course-layout">
+            <aside class="simple_video_learning-week-nav" cond="$simple_video_learning_weeks">
+                <div class="simple_video_learning-week-nav-head">
+                    <span>COURSE CONTENT</span>
+                    <strong>주차 바로가기</strong>
+                </div>
+                <nav>
+                    <a loop="$simple_video_learning_weeks=>$week_no,$week" href="#simple_video_learning-week-{$week_no}">
+                        <span>{$week_no}</span>
+                        <b>{$week_no}주차</b>
+                        <small>{count($week->lectures)}</small>
+                    </a>
+                </nav>
+            </aside>
+
+            <section class="simple_video_learning-week-content">
+                <div class="simple_video_learning-empty-state" cond="!$simple_video_learning_weeks">
+                    <span class="simple_video_learning-empty-icon">◎</span>
+                    <strong>아직 등록된 강의가 없습니다.</strong>
+                </div>
+
+                <article class="simple_video_learning-week-card" id="simple_video_learning-week-{$week_no}" loop="$simple_video_learning_weeks=>$week_no,$week">
+                    <header class="simple_video_learning-week-card-head">
+                        <div class="simple_video_learning-week-number">{$week_no}</div>
+                        <div>
+                            <span>WEEK {$week_no}</span>
+                            <h2>{$week->title ? $week->title : $week_no . '주차'}</h2>
+                            <p cond="$week->description">{$week->description}</p>
+                        </div>
+                        <strong class="simple_video_learning-week-count">{count($week->lectures)}강</strong>
+                    </header>
+
+                    <div class="simple_video_learning-lesson-list" cond="$week->lectures">
+                        <a cond="$simple_video_learning_can_learn" class="simple_video_learning-lesson-row" loop="$week->lectures=>$lecture" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningLecture', 'document_srl', $lecture->document_srl)}">
+                            <span class="simple_video_learning-lesson-play"><span>▶</span></span>
+                            <span class="simple_video_learning-lesson-copy">
+                                <small>LECTURE</small>
+                                <strong>{$lecture->display_title}</strong>
+                            </span>
+                            <span class="simple_video_learning-lesson-duration" cond="$lecture->duration">{floor($lecture->duration / 60)}분</span>
+                            <span class="simple_video_learning-lesson-chevron">›</span>
+                        </a>
+                        <div cond="!$simple_video_learning_can_learn" class="simple_video_learning-lesson-row is-locked" loop="$week->lectures=>$lecture">
+                            <span class="simple_video_learning-lesson-play"><span>⌁</span></span>
+                            <span class="simple_video_learning-lesson-copy">
+                                <small>LOCKED</small>
+                                <strong>{$lecture->display_title}</strong>
+                            </span>
+                            <span class="simple_video_learning-lesson-duration" cond="$lecture->duration">{floor($lecture->duration / 60)}분</span>
+                            <span class="simple_video_learning-lesson-chevron">·</span>
+                        </div>
+                    </div>
+
+                    <div class="simple_video_learning-week-empty" cond="!$week->lectures">
+                        <span>—</span>
+                        <p>이 주차에는 아직 등록된 강의가 없습니다.</p>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </main>
+</div>

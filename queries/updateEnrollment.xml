@@ -1,0 +1,13 @@
+<query id="updateEnrollment" action="update">
+    <tables><table name="simple_video_learning_enrollments" /></tables>
+    <columns>
+        <column name="active" var="active" />
+        <column name="status" var="status" />
+        <column name="decision_by" var="decision_by" filter="number" />
+        <column name="decision_at" var="decision_at" />
+        <column name="last_update" var="last_update" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="enrollment_key" var="enrollment_key" notnull="notnull" />
+    </conditions>
+</query>

@@ -1,0 +1,8 @@
+<query id="getPendingOpenEnrollmentMigration" action="select">
+    <tables><table name="simple_video_learning_courses" /></tables>
+    <columns><column name="count(*)" alias="count" /></columns>
+    <conditions>
+        <condition operation="equal" column="enrollment_enabled" var="enrollment_enabled" notnull="notnull" />
+        <condition operation="equal" column="enrollment_mode" var="enrollment_mode" notnull="notnull" pipe="and" />
+    </conditions>
+</query>

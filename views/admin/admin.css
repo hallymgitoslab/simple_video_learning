@@ -1,0 +1,65 @@
+/* Scoped to Simple Video Learning administration; preserve Rhymix's native controls. */
+.svl-admin{max-width:1180px;margin:0 auto 40px;color:#182236}
+.svl-admin *{box-sizing:border-box}
+.svl-admin .svl-eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:#6366f1;text-transform:uppercase}
+.svl-admin .svl-header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:10px 0 24px}
+.svl-admin .svl-header h1{margin:4px 0 8px;font-size:28px;line-height:1.3}
+.svl-admin .svl-header p{margin:0;color:#667085}
+.svl-admin .svl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 24px;padding:5px;border:1px solid #e5e9f2;background:#f8faff;border-radius:14px;list-style:none}
+.svl-admin .svl-tabs li{margin:0}
+.svl-admin .svl-tabs a{display:block;padding:11px 18px;border-radius:10px;color:#506078;text-decoration:none;font-weight:700}
+.svl-admin .svl-tabs .is-active a{background:#fff;color:#4f46e5;box-shadow:0 2px 8px rgba(30,41,59,.09)}
+.svl-admin .svl-card{margin:0 0 20px;padding:25px 28px;background:#fff;border:1px solid #e4e9f2;border-radius:18px;box-shadow:0 8px 24px rgba(15,23,42,.04)}
+.svl-admin .svl-card-header{margin:0 0 20px}
+.svl-admin .svl-card-header h2{font-size:18px;margin:0 0 7px;line-height:1.35}
+.svl-admin .svl-card-header p{margin:0;color:#67768e;line-height:1.6}
+.svl-admin .svl-api-path{padding:13px 15px;border-radius:10px;background:#f2f5ff;border:1px solid #e1e7ff;color:#313c68;overflow-wrap:anywhere;font-family:ui-monospace,monospace}
+.svl-admin .svl-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 0}
+.svl-admin .svl-meta>div{padding:14px;background:#f8fafc;border-radius:12px}
+.svl-admin .svl-meta strong{display:block;margin-bottom:5px;font-size:12px;color:#667085}
+.svl-admin .svl-meta span{font-size:13px}
+.svl-admin .svl-section{margin:0 0 22px;padding:0;border:0}
+.svl-admin .svl-section h2{font-size:18px;margin:0 0 18px}
+.svl-admin .x_control-group{margin-bottom:20px}
+.svl-admin .x_control-label{font-weight:700;color:#334155}
+.svl-admin input[type=text],.svl-admin input[type=number]{min-height:38px;max-width:100%;border-radius:9px}
+.svl-admin .svl-token-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.svl-admin .svl-token-line input{flex:1 1 350px;min-width:180px}
+.svl-admin .x_help-block{line-height:1.55;color:#64748b}
+.svl-admin .svl-card-footer{display:flex;justify-content:flex-end;border-top:1px solid #edf0f5;margin-top:26px;padding-top:20px}
+.svl-admin .svl-danger{border-color:#f3dada;background:#fffafa}
+.svl-admin .svl-danger .svl-card-header h2{color:#a12b35}
+.svl-admin .svl-admin-launch{white-space:nowrap}
+@media(max-width:720px){.svl-admin .svl-header{display:block}.svl-admin .svl-header .svl-admin-launch{margin-top:15px}.svl-admin .svl-card{padding:19px 16px}.svl-admin .svl-meta{grid-template-columns:1fr}.svl-admin .svl-tabs a{padding:9px 12px}.svl-admin .x_control-label{float:none;width:auto;text-align:left}.svl-admin .x_controls{margin-left:0}}
+
+.svl-course-nav{display:flex;gap:9px;margin:0 0 22px;flex-wrap:wrap}.svl-course-nav a{padding:11px 16px;border:1px solid #e2e8f0;background:#fff;border-radius:10px;text-decoration:none;font-weight:700;color:#475569}.svl-course-nav a.is-active{background:#eef2ff;border-color:#c7d2fe;color:#4338ca}.svl-card-header-flex{display:flex;justify-content:space-between;gap:18px;align-items:center}.svl-table-wrap{max-width:100%;overflow-x:auto}.svl-course-table{width:100%;min-width:720px}.svl-course-table td{vertical-align:middle;padding:14px 10px}.svl-muted{color:#64748b;font-size:12px;max-width:350px;white-space:normal;margin-top:4px}.svl-empty{text-align:center;padding:36px!important;color:#64748b}.svl-editor{max-width:880px}.svl-operator-panel{margin-top:18px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px;padding:18px}.svl-detail-table{width:100%;min-width:740px}.svl-detail-table td{padding:18px}.svl-course-form{margin-top:18px}.svl-admin .svl-course-form .x_controls input,.svl-admin .svl-course-form .x_controls textarea{max-width:100%}@media(max-width:720px){.svl-card-header-flex{align-items:flex-start;flex-direction:column}}
+/* Course detail page: intentionally independent of Rhymix table/form-inline layout */
+.svl-admin .svl-detail-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);align-items:start;gap:22px}
+.svl-admin .svl-detail-layout .svl-card{min-width:0}
+.svl-admin .svl-detail-main{padding:30px}
+.svl-admin .svl-field-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(130px,.6fr);gap:20px 18px}
+.svl-admin .svl-field{min-width:0;display:flex;flex-direction:column;gap:8px}
+.svl-admin .svl-field-full{grid-column:1/-1}
+.svl-admin .svl-field label,.svl-admin .svl-team-add label{font-weight:700;font-size:13px;color:#334155}
+.svl-admin .svl-field input,.svl-admin .svl-field textarea,.svl-admin .svl-field select,.svl-admin .svl-team-add input,.svl-admin .svl-team-add select{box-sizing:border-box;display:block;width:100%;max-width:100%;min-height:42px;margin:0;padding:10px 12px;border:1px solid #dce3ee;border-radius:10px;background:#fff;color:#172033;font:inherit;line-height:1.4}
+.svl-admin .svl-field textarea{min-height:112px;resize:vertical}
+.svl-admin .svl-field :is(input,textarea,select):focus,.svl-admin .svl-team-add :is(input,select):focus{outline:2px solid #c7d2fe;outline-offset:0;border-color:#6366f1}
+.svl-admin .svl-detail-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:20px;border-top:1px solid #edf0f5}
+.svl-admin .svl-detail-side{display:grid;gap:20px;min-width:0}
+.svl-admin .svl-team-list{display:grid;gap:10px;margin-bottom:24px}
+.svl-admin .svl-team-member{display:flex;align-items:center;gap:10px;padding:12px;background:#f8fafc;border:1px solid #edf0f5;border-radius:12px}
+.svl-admin .svl-team-avatar{width:36px;height:36px;flex:none;display:grid;place-items:center;background:#eaeaff;border-radius:12px;color:#5046d7;font-weight:800}
+.svl-admin .svl-team-info{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.svl-admin .svl-team-info strong,.svl-admin .svl-team-info small{overflow-wrap:anywhere}
+.svl-admin .svl-team-info small{color:#64748b}
+.svl-admin .svl-team-member form{flex:none;margin:0}
+.svl-admin .svl-team-add{padding-top:20px;border-top:1px solid #edf0f5}
+.svl-admin .svl-team-add>strong{display:block;margin-bottom:14px}
+.svl-admin .svl-team-add form{display:grid;gap:9px}
+.svl-admin .svl-team-add .svl-add-button{margin-top:9px}
+.svl-admin .svl-delete-card{background:#fffafa;border-color:#f4dede}
+.svl-admin .svl-delete-card h2{color:#a12b35}
+@media(max-width:1050px){.svl-admin .svl-detail-layout{grid-template-columns:1fr}.svl-admin .svl-detail-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.svl-admin .svl-detail-main{padding:20px 16px}.svl-admin .svl-field-grid,.svl-admin .svl-detail-side{grid-template-columns:1fr}.svl-admin .svl-field-full{grid-column:auto}}
+
+.svl-admin .svl-guide-code{background:#101828;color:#e9edf5;padding:20px;border-radius:12px;overflow-x:auto;white-space:pre;font-size:12px;line-height:1.75}.svl-admin .svl-guide-errors{display:grid;gap:10px}.svl-admin .svl-guide-errors>div{display:flex;gap:16px;padding:12px 16px;background:#f8fafc;border-radius:10px}.svl-admin .svl-guide-errors strong{width:36px;flex:none}.svl-admin .svl-guide-errors span{color:#526076}

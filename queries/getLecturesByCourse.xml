@@ -1,0 +1,10 @@
+<query id="getLecturesByCourse" action="select">
+    <tables><table name="simple_video_learning_lectures" /></tables>
+    <columns><column name="*" /></columns>
+    <conditions>
+        <condition operation="equal" column="course_srl" var="course_srl" filter="number" notnull="notnull" />
+    </conditions>
+    <navigation>
+        <index var="sort_index" default="week_no" order="asc" />
+    </navigation>
+</query>

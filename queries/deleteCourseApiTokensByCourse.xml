@@ -1,0 +1,4 @@
+<query id="deleteCourseApiTokensByCourse" action="delete">
+    <tables><table name="simple_video_learning_course_api_tokens" /></tables>
+    <conditions><condition operation="equal" column="course_srl" var="course_srl" filter="number" notnull="notnull" /></conditions>
+</query>

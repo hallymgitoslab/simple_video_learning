@@ -1,0 +1,16 @@
+<query id="insertProgress" action="insert">
+    <tables><table name="simple_video_learning_progress" /></tables>
+    <columns>
+        <column name="progress_srl" var="progress_srl" filter="number" notnull="notnull" />
+        <column name="progress_key" var="progress_key" notnull="notnull" />
+        <column name="document_srl" var="document_srl" filter="number" notnull="notnull" />
+        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <column name="watched_ranges" var="watched_ranges" notnull="notnull" />
+        <column name="watched_seconds" var="watched_seconds" filter="number" default="0" />
+        <column name="frontier" var="frontier" filter="number" default="0" />
+        <column name="last_position" var="last_position" filter="number" default="0" />
+        <column name="completed" var="completed" default="N" />
+        <column name="last_heartbeat" var="last_heartbeat" />
+        <column name="regdate" var="regdate" />
+    </columns>
+</query>

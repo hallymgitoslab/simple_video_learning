@@ -1,0 +1,12 @@
+<table name="simple_video_learning_course_api_tokens">
+    <column name="token_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="token_hash" type="varchar" size="64" notnull="notnull" unique="unique_token_hash" />
+    <column name="token_prefix" type="varchar" size="20" notnull="notnull" index="idx_token_prefix" />
+    <column name="course_srl" type="number" size="11" notnull="notnull" index="idx_course_srl" />
+    <column name="label" type="varchar" size="120" />
+    <column name="created_by" type="number" size="11" default="0" notnull="notnull" index="idx_created_by" />
+    <column name="active" type="char" size="1" default="Y" notnull="notnull" index="idx_active" />
+    <column name="last_used_at" type="date" />
+    <column name="regdate" type="date" index="idx_regdate" />
+    <column name="last_update" type="date" index="idx_last_update" />
+</table>

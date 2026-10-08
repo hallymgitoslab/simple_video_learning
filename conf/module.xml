@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+    <classes>
+        <class type="default" name="Src\ModuleBase" />
+        <class type="install" name="Src\ModuleBase" />
+    </classes>
+
+    <grants>
+        <grant name="list" default="guest">
+            <title xml:lang="ko">수업 목록 보기</title>
+            <title xml:lang="en">View courses</title>
+        </grant>
+        <grant name="view" default="member">
+            <title xml:lang="ko">강의 보기</title>
+            <title xml:lang="en">View lectures</title>
+        </grant>
+        <grant name="upload" default="manager">
+            <title xml:lang="ko">영상 업로드</title>
+            <title xml:lang="en">Upload videos</title>
+        </grant>
+    </grants>
+
+    <actions>
+        <action name="dispSimple_video_learningAdminConfig"
+            class="Src\Controllers\AdminController"
+            admin-index="true"
+            menu-name="simple_video_learningAdminConfig"
+            method="GET" />
+
+        <action name="dispSimple_video_learningAdminApiGuide"
+            class="Src\Controllers\AdminController"
+            menu-name="simple_video_learningAdminConfig"
+            method="GET" />
+
+        <action name="procSimple_video_learningAdminConfig"
+            class="Src\Controllers\AdminController"
+            method="POST" />
+
+        <action name="procSimple_video_learningAdminRegenerateApiToken"
+            class="Src\Controllers\AdminController"
+            method="POST" />
+
+        <action name="dispSimple_video_learningAdminCourses"
+            class="Src\Controllers\CourseAdminController"
+            menu-name="simple_video_learningAdminConfig"
+            method="GET" />
+
+        <action name="dispSimple_video_learningAdminCourseCreate" class="Src\Controllers\CourseAdminController" method="GET" />
+        <action name="dispSimple_video_learningAdminCourseDetail" class="Src\Controllers\CourseAdminController" method="GET" />
+        <action name="dispSimple_video_learningAdminLectureAssignments" class="Src\Controllers\CourseAdminController" method="GET" />
+
+        <action name="procSimple_video_learningAdminSaveCourse"
+            class="Src\Controllers\CourseAdminController"
+            method="POST" />
+
+        <action name="procSimple_video_learningAdminDeleteCourse"
+            class="Src\Controllers\CourseAdminController"
+            method="POST" />
+        <action name="procSimple_video_learningAdminAssignLecture"
+            class="Src\Controllers\CourseAdminController"
+            method="POST" />
+
+        <action name="procSimple_video_learningAdminAssignCourseRole"
+            class="Src\Controllers\CourseAdminController"
+            method="POST" />
+
+        <action name="procSimple_video_learningAdminRemoveCourseRole"
+            class="Src\Controllers\CourseAdminController"
+            method="POST" />
+
+        <action name="dispSimple_video_learningAdminProgress"
+            class="Src\Controllers\ProgressAdminController"
+            menu-name="simple_video_learningAdminConfig"
+            method="GET" />
+
+        <action name="dispSimple_video_learningCourses"
+            class="Src\Controllers\CourseController"
+            permission="list"
+            standalone="false"
+            index="true"
+            method="GET" />
+
+        <action name="dispSimple_video_learningCourse"
+            class="Src\Controllers\CourseController"
+            permission="list"
+            standalone="false"
+            route="course/$course_srl:int"
+            method="GET" />
+
+        <action name="dispSimple_video_learningLecture"
+            class="Src\Controllers\CourseController"
+            permission="list"
+            standalone="false"
+            route="lecture/$document_srl:int"
+            method="GET" />
+
+        <action name="procSimple_video_learningEnroll"
+            class="Src\Controllers\EnrollmentController"
+            permission="list"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningUnenroll"
+            class="Src\Controllers\EnrollmentController"
+            permission="list"
+            standalone="false"
+            method="POST" />
+
+        <action name="dispSimple_video_learningManageCourse"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            route="course/$course_srl:int/manage"
+            method="GET" />
+
+        <action name="dispSimple_video_learningCourseAttendance"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            route="course/$course_srl:int/attendance"
+            method="GET" />
+
+        <action name="procSimple_video_learningEnrollmentDecision"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningManualEnroll"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningAssignCourseRole"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningRemoveCourseRole"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningDeleteLecture"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningCreateCourseApiToken"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningRevokeCourseApiToken"
+            class="Src\Controllers\CourseOperationsController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="dispSimple_video_learningUpload"
+            class="Src\Controllers\UploadController"
+            permission="view"
+            standalone="false"
+            route="upload"
+            method="GET" />
+
+        <action name="procSimple_video_learningUpload"
+            class="Src\Controllers\UploadController"
+            permission="view"
+            standalone="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningApiUpsertLecture"
+            class="Src\Controllers\ApiController"
+            standalone="true"
+            check-csrf="false"
+            method="POST" />
+
+        <action name="dispSimple_video_learningApiLecture"
+            class="Src\Controllers\ApiController"
+            standalone="true"
+            check-csrf="false"
+            method="GET" />
+
+        <action name="procSimple_video_learningProgress"
+            class="Src\Controllers\ProgressController"
+            standalone="true"
+            method="POST" />
+
+        <action name="procSimple_video_learningCompatRest"
+            class="Src\Controllers\MoodleCompatController"
+            standalone="true"
+            check-csrf="false"
+            method="POST" />
+
+        <action name="procSimple_video_learningCompatUpload"
+            class="Src\Controllers\MoodleCompatController"
+            standalone="true"
+            check-csrf="false"
+            method="POST" />
+    </actions>
+
+    <eventHandlers>
+        <eventHandler before="file.downloadFile"
+            class="Src\EventHandler"
+            method="beforeDownloadFile" />
+        <eventHandler after="document.deleteDocument"
+            class="Src\EventHandler"
+            method="afterDeleteDocument" />
+        <eventHandler after="menu.getModuleListInSitemap"
+            class="Src\EventHandler"
+            method="afterMenuModuleList" />
+    </eventHandlers>
+
+    <menus>
+        <menu name="simple_video_learningAdminConfig">
+            <title xml:lang="ko">Simple Video Learning</title>
+            <title xml:lang="en">Simple Video Learning</title>
+        </menu>
+    </menus>
+</module>

@@ -1,0 +1,168 @@
+<load target="./style.css" />
+
+<div class="simple_video_learning-shell">
+    <header class="simple_video_learning-topbar">
+        <a class="simple_video_learning-brand" href="{getUrl('', 'mid', $simple_video_learning_mid)}">
+            <span class="simple_video_learning-brand-mark">LMS</span>
+            <span><strong>수업 운영</strong><small>{$simple_video_learning_course->title}</small></span>
+        </a>
+        <nav class="simple_video_learning-topnav">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}">수업으로</a>
+            <a class="is-active" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningManageCourse', 'course_srl', $simple_video_learning_course->course_srl)}">운영</a>
+            <a cond="$simple_video_learning_manage_permissions->view_progress" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourseAttendance', 'course_srl', $simple_video_learning_course->course_srl)}">출석·수강기록</a>
+        </nav>
+    </header>
+
+    <main class="simple_video_learning-main">
+        <section class="simple_video_learning-section-head">
+            <div><span class="simple_video_learning-section-label">COURSE OPERATIONS</span><h1>{$simple_video_learning_course->title} 운영</h1></div>
+        </section>
+
+        <div class="simple_video_learning-ops-grid">
+            <section class="simple_video_learning-ops-card" cond="$simple_video_learning_manage_permissions->manage_enrollments">
+                <h2>승인 대기</h2>
+                <div class="simple_video_learning-ops-empty" cond="!$simple_video_learning_enrollments">수강신청 내역이 없습니다.</div>
+                <div loop="$simple_video_learning_enrollments=>$enrollment" cond="$enrollment->status === 'pending'" class="simple_video_learning-ops-row">
+                    <div><strong>{$enrollment->member->nick_name}</strong><small>{$enrollment->member->user_id}</small></div>
+                    <div class="simple_video_learning-ops-actions">
+                        <form action="./" method="post">
+                            <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                            <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                            <input type="hidden" name="act" value="procSimple_video_learningEnrollmentDecision" />
+                            <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                            <input type="hidden" name="member_srl" value="{$enrollment->member_srl}" />
+                            <input type="hidden" name="decision" value="approve" />
+                            <button class="simple_video_learning-enrollment-primary" type="submit">승인</button>
+                        </form>
+                        <form action="./" method="post">
+                            <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                            <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                            <input type="hidden" name="act" value="procSimple_video_learningEnrollmentDecision" />
+                            <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                            <input type="hidden" name="member_srl" value="{$enrollment->member_srl}" />
+                            <input type="hidden" name="decision" value="reject" />
+                            <button class="simple_video_learning-enrollment-secondary" type="submit">거절</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="simple_video_learning-ops-card" cond="$simple_video_learning_manage_permissions->manage_enrollments">
+                <h2>수강생</h2>
+                <form action="./" method="post" class="simple_video_learning-ops-inline">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningManualEnroll" />
+                    <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                    <input type="text" name="user_id" placeholder="회원 ID" required />
+                    <button class="simple_video_learning-enrollment-primary" type="submit">수동 등록</button>
+                </form>
+                <div loop="$simple_video_learning_enrollments=>$enrollment" cond="$enrollment->status === 'approved'" class="simple_video_learning-ops-row">
+                    <div class="simple_video_learning-ops-student">
+                        <strong>{$enrollment->member->nick_name}</strong>
+                        <small>{$enrollment->member->user_id}</small>
+                        <span>{$enrollment->completed_count}/{$enrollment->lecture_count}강 완료 · {$enrollment->progress_percentage}%</span>
+                        <div class="simple_video_learning-ops-progress"><i style="width:{$enrollment->progress_percentage}%"></i></div>
+                        <small cond="$enrollment->last_heartbeat">마지막 학습 {zdate($enrollment->last_heartbeat, 'Y-m-d H:i')}</small>
+                    </div>
+                    <div class="simple_video_learning-ops-actions">
+                        <a class="simple_video_learning-attendance-detail" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourseAttendance', 'course_srl', $simple_video_learning_course->course_srl, 'member_srl', $enrollment->member_srl)}">수강기록</a>
+                        <form action="./" method="post">
+                        <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                        <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                        <input type="hidden" name="act" value="procSimple_video_learningEnrollmentDecision" />
+                        <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                        <input type="hidden" name="member_srl" value="{$enrollment->member_srl}" />
+                        <input type="hidden" name="decision" value="suspend" />
+                        <button class="simple_video_learning-enrollment-secondary" type="submit">수강 중지</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="simple_video_learning-ops-card" cond="$simple_video_learning_manage_permissions->edit_activities || $simple_video_learning_manage_permissions->site_privileged">
+                <h2>교수 / 조교</h2>
+                <form action="./" method="post" class="simple_video_learning-ops-inline">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningAssignCourseRole" />
+                    <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                    <input type="text" name="user_id" placeholder="회원 ID" required />
+                    <select name="role">
+                        <option value="assistant">조교</option>
+                        <option value="teacher" cond="$simple_video_learning_manage_permissions->site_privileged">교수</option>
+                    </select>
+                    <button class="simple_video_learning-enrollment-primary" type="submit">배정</button>
+                </form>
+                <div loop="$simple_video_learning_course_roles=>$role" class="simple_video_learning-ops-row">
+                    <div><strong>{$role->member->nick_name}</strong><small>{$role->member->user_id} · {$role->role === 'teacher' ? '교수' : '조교'}</small></div>
+                    <form action="./" method="post">
+                        <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                        <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                        <input type="hidden" name="act" value="procSimple_video_learningRemoveCourseRole" />
+                        <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                        <input type="hidden" name="member_srl" value="{$role->member_srl}" />
+                        <button class="simple_video_learning-enrollment-secondary" type="submit">해제</button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="simple_video_learning-ops-card simple_video_learning-ops-card-wide" cond="$simple_video_learning_manage_permissions->edit_activities">
+                <div class="simple_video_learning-ops-card-head">
+                    <div>
+                        <h2>API 토큰</h2>
+                        <p style="margin:4px 0 0;color:var(--ap-muted);font-size:11px">이 수업에만 접근 가능한 Bearer 토큰입니다. 교수만 생성/폐기할 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <div cond="$simple_video_learning_new_api_token" class="simple_video_learning-api-token-new">
+                    <strong>새 토큰 — 지금 한 번만 표시됩니다</strong>
+                    <code>{$simple_video_learning_new_api_token}</code>
+                    <p>복사해서 안전한 곳에 보관하세요. 다시 조회할 수 없습니다.</p>
+                </div>
+
+                <form action="./" method="post" class="simple_video_learning-ops-inline">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningCreateCourseApiToken" />
+                    <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                    <input type="text" name="label" placeholder="예: Simple Video Learning 연동" maxlength="120" />
+                    <button class="simple_video_learning-enrollment-primary" type="submit">토큰 생성</button>
+                </form>
+
+                <div loop="$simple_video_learning_course_api_tokens=>$token" class="simple_video_learning-ops-row">
+                    <div>
+                        <strong>{$token->label ? $token->label : 'API token'}</strong>
+                        <small>{$token->token_prefix}… · 생성 {zdate($token->regdate, 'Y-m-d H:i')}</small>
+                        <small cond="$token->last_used_at">최근 사용 {zdate($token->last_used_at, 'Y-m-d H:i')}</small>
+                    </div>
+                    <form action="./" method="post" onsubmit="return confirm('이 API 토큰을 폐기할까요? 폐기 후 복구할 수 없습니다.');">
+                        <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                        <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                        <input type="hidden" name="act" value="procSimple_video_learningRevokeCourseApiToken" />
+                        <input type="hidden" name="course_srl" value="{$simple_video_learning_course->course_srl}" />
+                        <input type="hidden" name="token_srl" value="{$token->token_srl}" />
+                        <button class="simple_video_learning-ops-danger" type="submit">폐기</button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="simple_video_learning-ops-card simple_video_learning-ops-card-wide" cond="$simple_video_learning_manage_permissions->edit_activities">
+                <div class="simple_video_learning-ops-card-head">
+                    <h2>강의 관리</h2>
+                    <a class="simple_video_learning-enrollment-primary" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningUpload')}">영상 업로드</a>
+                </div>
+                <div loop="$simple_video_learning_manage_lectures=>$lecture" class="simple_video_learning-ops-row">
+                    <div><strong>{$lecture->display_title}</strong><small>{$lecture->week_no}주차 · {$lecture->duration ? floor($lecture->duration / 60) . '분' : '길이 미상'}</small></div>
+                    <form action="./" method="post" onsubmit="return confirm('강의와 영상, 모든 수강생 진도 기록을 삭제할까요?');">
+                        <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                        <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                        <input type="hidden" name="act" value="procSimple_video_learningDeleteLecture" />
+                        <input type="hidden" name="document_srl" value="{$lecture->document_srl}" />
+                        <button class="simple_video_learning-ops-danger" type="submit">강의 삭제</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>

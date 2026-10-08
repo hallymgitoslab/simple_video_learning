@@ -1,0 +1,5 @@
+<query id="getCourseRole" action="select">
+    <tables><table name="simple_video_learning_course_roles" /></tables>
+    <columns><column name="*" /></columns>
+    <conditions><condition operation="equal" column="role_key" var="role_key" notnull="notnull" /></conditions>
+</query>

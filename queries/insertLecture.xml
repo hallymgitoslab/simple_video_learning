@@ -1,0 +1,18 @@
+<query id="insertLecture" action="insert">
+    <tables><table name="simple_video_learning_lectures" /></tables>
+    <columns>
+        <column name="lecture_srl" var="lecture_srl" filter="number" notnull="notnull" />
+        <column name="external_id" var="external_id" notnull="notnull" />
+        <column name="module_srl" var="module_srl" filter="number" default="0" />
+        <column name="course_srl" var="course_srl" filter="number" default="0" />
+        <column name="week_no" var="week_no" filter="number" default="1" />
+        <column name="sort_order" var="sort_order" filter="number" default="0" />
+        <column name="uploader_srl" var="uploader_srl" filter="number" default="0" />
+        <column name="document_srl" var="document_srl" filter="number" notnull="notnull" />
+        <column name="video_url" var="video_url" notnull="notnull" />
+        <column name="duration" var="duration" filter="number" default="0" />
+        <column name="completion_threshold" var="completion_threshold" filter="number" default="80" />
+        <column name="regdate" var="regdate" />
+        <column name="last_update" var="last_update" />
+    </columns>
+</query>

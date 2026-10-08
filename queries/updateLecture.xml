@@ -1,0 +1,18 @@
+<query id="updateLecture" action="update">
+    <tables><table name="simple_video_learning_lectures" /></tables>
+    <columns>
+        <column name="module_srl" var="module_srl" filter="number" />
+        <column name="course_srl" var="course_srl" filter="number" />
+        <column name="week_no" var="week_no" filter="number" />
+        <column name="sort_order" var="sort_order" filter="number" />
+        <column name="uploader_srl" var="uploader_srl" filter="number" />
+        <column name="document_srl" var="document_srl" filter="number" />
+        <column name="video_url" var="video_url" />
+        <column name="duration" var="duration" filter="number" />
+        <column name="completion_threshold" var="completion_threshold" filter="number" />
+        <column name="last_update" var="last_update" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="external_id" var="external_id" notnull="notnull" />
+    </conditions>
+</query>

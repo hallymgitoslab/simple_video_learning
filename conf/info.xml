@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">Simple Video Learning 강의</title>
+    <title xml:lang="en">Simple Video Learning Courses</title>
+    <description xml:lang="ko">Simple Video Learning 기반의 수업 운영, 수강관리, 역할, 영상 학습 및 진도 추적 기능을 제공하며 Simple LMS 코어로 확장합니다.</description>
+    <description xml:lang="en">Provides Simple Video Learning lectures through standalone course/week pages and tracks verified per-member video progress.</description>
+    <version>0.5.10</version>
+    <date>2026-10-08</date>
+    <category>service</category>
+    <author link="https://github.com/hallymgitoslab/simple_video_learning">
+        <name xml:lang="ko">hallymgitoslab</name>
+        <name xml:lang="en">hallymgitoslab</name>
+    </author>
+</module>

@@ -1,0 +1,14 @@
+<query id="updateProgress" action="update">
+    <tables><table name="simple_video_learning_progress" /></tables>
+    <columns>
+        <column name="watched_ranges" var="watched_ranges" />
+        <column name="watched_seconds" var="watched_seconds" filter="number" />
+        <column name="frontier" var="frontier" filter="number" />
+        <column name="last_position" var="last_position" filter="number" />
+        <column name="completed" var="completed" />
+        <column name="last_heartbeat" var="last_heartbeat" />
+    </columns>
+    <conditions>
+        <condition operation="equal" column="progress_key" var="progress_key" notnull="notnull" />
+    </conditions>
+</query>

@@ -1,0 +1,63 @@
+<load target="./style.css" />
+
+<div class="simple_video_learning-shell" data-simple_video_learning-module-srl="{$module_info->module_srl}">
+    <header class="simple_video_learning-topbar">
+        <nav class="simple_video_learning-topnav" aria-label="Simple Video Learning 메뉴">
+            <a class="is-active" href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <a cond="$simple_video_learning_can_upload" class="simple_video_learning-topnav-primary" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningUpload')}">
+                <span>＋</span> 영상 업로드
+            </a>
+        </nav>
+    </header>
+
+    <main class="simple_video_learning-main">
+        <section class="simple_video_learning-dashboard-hero">
+            <div class="simple_video_learning-dashboard-copy">
+                <span class="simple_video_learning-kicker">SIMPLE VIDEO LEARNING</span>
+                <h1>내 강의실</h1>
+                <p>수업을 선택하고 주차별 강의를 이어서 학습하세요.</p>
+            </div>
+            <div class="simple_video_learning-hero-stat" cond="$simple_video_learning_courses">
+                <span>공개 수업</span>
+                <strong>{count($simple_video_learning_courses)}</strong>
+                <small>courses</small>
+            </div>
+        </section>
+
+        <section class="simple_video_learning-section-head">
+            <div>
+                <span class="simple_video_learning-section-label">COURSES</span>
+                <h2>수업 목록</h2>
+            </div>
+            <span class="simple_video_learning-section-note" cond="$simple_video_learning_courses">원하는 수업을 선택하세요</span>
+        </section>
+
+        <div class="simple_video_learning-empty-state" cond="!$simple_video_learning_courses">
+            <span class="simple_video_learning-empty-icon">◎</span>
+            <strong>아직 공개된 수업이 없습니다.</strong>
+            <p>관리자가 수업을 공개하면 이곳에 표시됩니다.</p>
+        </div>
+
+        <section class="simple_video_learning-course-grid" cond="$simple_video_learning_courses">
+            <a class="simple_video_learning-course-card" loop="$simple_video_learning_courses=>$course" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $course->course_srl)}">
+                <div class="simple_video_learning-course-card-top">
+                    <span class="simple_video_learning-course-code">{$course->course_code}</span>
+                    <span class="simple_video_learning-course-draft" cond="$course->is_published !== 'Y'">준비중</span>
+                    <span class="simple_video_learning-course-arrow">↗</span>
+                </div>
+                <div class="simple_video_learning-course-card-body">
+                    <h3>{$course->title}</h3>
+                    <p>{$course->description ? $course->description : '주차별 강의와 학습 영상을 확인하세요.'}</p>
+                </div>
+                <div class="simple_video_learning-course-card-meta">
+                    <span><b>{$course->num_sections ? $course->num_sections : 15}</b> 주차</span>
+                    <span class="simple_video_learning-course-enter" cond="$course->can_learn">{$course->is_enrolled ? '수강중' : '바로 학습'} <b>→</b></span>
+                    <span class="simple_video_learning-course-enter is-pending" cond="!$course->can_learn && $course->enrollment_status === 'pending'">승인 대기 <b>→</b></span>
+                    <span class="simple_video_learning-course-enter is-enroll" cond="!$course->can_learn && $course->enrollment_status !== 'pending' && $course->enrollment_mode !== 'closed' && $course->enrollment_required">{$course->enrollment_status === 'rejected' ? '다시 신청' : '수강신청'} <b>→</b></span>
+                    <span class="simple_video_learning-course-enter" cond="!$course->can_learn && $course->enrollment_mode === 'closed'">신청 마감 <b>→</b></span>
+                    <span class="simple_video_learning-course-enter" cond="!$course->can_learn && !$course->enrollment_required">로그인 후 학습 <b>→</b></span>
+                </div>
+            </a>
+        </section>
+    </main>
+</div>

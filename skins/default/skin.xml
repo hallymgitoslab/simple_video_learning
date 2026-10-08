@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+    <title xml:lang="ko">Simple Video Learning</title>
+    <title xml:lang="en">Simple Video Learning</title>
+    <description xml:lang="ko">수업 대시보드, 자동 주차 내비게이션, 집중형 영상 플레이어, 드래그앤드롭 업로드를 제공하는 현대적인 반응형 LMS 스킨입니다.</description>
+    <description xml:lang="en">Modern responsive LMS skin with course dashboard, automatic week navigation, focused lecture player, and drag-and-drop upload.</description>
+    <version>2.0</version>
+    <date>2026-10-08</date>
+    <author>
+        <name>Hallym AI Education</name>
+    </author>
+</skin>

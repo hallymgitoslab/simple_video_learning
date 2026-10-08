@@ -1,0 +1,15 @@
+<query id="insertCourse" action="insert">
+    <tables><table name="simple_video_learning_courses" /></tables>
+    <columns>
+        <column name="course_srl" var="course_srl" filter="number" notnull="notnull" />
+        <column name="course_code" var="course_code" notnull="notnull" />
+        <column name="title" var="title" notnull="notnull" />
+        <column name="description" var="description" />
+        <column name="num_sections" var="num_sections" filter="number" default="15" />
+        <column name="enrollment_enabled" var="enrollment_enabled" default="Y" />
+        <column name="enrollment_mode" var="enrollment_mode" default="auto" />
+        <column name="is_published" var="is_published" default="Y" />
+        <column name="regdate" var="regdate" />
+        <column name="last_update" var="last_update" />
+    </columns>
+</query>

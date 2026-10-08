@@ -1,0 +1,10 @@
+<query id="updateCourseRole" action="update">
+    <tables><table name="simple_video_learning_course_roles" /></tables>
+    <columns>
+        <column name="role" var="role" />
+        <column name="active" var="active" />
+        <column name="assigned_by" var="assigned_by" filter="number" />
+        <column name="last_update" var="last_update" />
+    </columns>
+    <conditions><condition operation="equal" column="role_key" var="role_key" notnull="notnull" /></conditions>
+</query>

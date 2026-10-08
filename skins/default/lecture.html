@@ -1,0 +1,60 @@
+<load target="./style.css" />
+
+<div class="simple_video_learning-shell simple_video_learning-shell-lecture" data-simple_video_learning-module-srl="{$module_info->module_srl}" data-simple_video_learning-document-srl="{$simple_video_learning_lecture->document_srl}">
+    <header class="simple_video_learning-topbar">
+        <nav class="simple_video_learning-topnav" aria-label="Simple Video Learning 메뉴">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <a cond="$simple_video_learning_can_upload" class="simple_video_learning-topnav-primary" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningUpload')}">
+                <span>＋</span> 영상 업로드
+            </a>
+        </nav>
+    </header>
+
+    <main class="simple_video_learning-main">
+        <nav class="simple_video_learning-breadcrumb" aria-label="breadcrumb">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <span>›</span>
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}">{$simple_video_learning_course->title}</a>
+            <span>›</span>
+            <strong>{$simple_video_learning_lecture->week_no}주차</strong>
+        </nav>
+
+        <section class="simple_video_learning-lecture-titlebar">
+            <div>
+                <span class="simple_video_learning-course-code">{$simple_video_learning_course->course_code} · {$simple_video_learning_lecture->week_no}주차</span>
+                <h1>{$simple_video_learning_document->getTitleText()}</h1>
+            </div>
+            <span class="simple_video_learning-complete-badge is-complete" cond="$simple_video_learning_progress_row && $simple_video_learning_progress_row->completed === 'Y'">✓ 학습 완료</span>
+            <span class="simple_video_learning-complete-badge" cond="!$simple_video_learning_progress_row || $simple_video_learning_progress_row->completed !== 'Y'">학습 중</span>
+        </section>
+
+        <section class="simple_video_learning-learning-stage">
+            <div class="simple_video_learning-player-card">
+                <div class="simple_video_learning-player-topline">
+                    <span>LECTURE PLAYER</span>
+                    <small>진도는 자동으로 저장됩니다</small>
+                </div>
+                <div class="simple_video_learning-lecture-content">{$simple_video_learning_document->getContent(false)}</div>
+            </div>
+
+            <aside class="simple_video_learning-lecture-aside">
+                <div class="simple_video_learning-info-card">
+                    <span class="simple_video_learning-info-label">현재 강의</span>
+                    <strong>{$simple_video_learning_lecture->week_no}주차</strong>
+                    <p>{$simple_video_learning_document->getTitleText()}</p>
+                </div>
+                <div class="simple_video_learning-info-card">
+                    <span class="simple_video_learning-info-label">학습 안내</span>
+                    <ul>
+                        <li>영상 시청 진도는 자동 저장됩니다.</li>
+                        <li>건너뛴 구간은 진도로 인정되지 않습니다.</li>
+                        <li>완료 기준 충족 시 자동으로 완료 처리됩니다.</li>
+                    </ul>
+                </div>
+                <a class="simple_video_learning-side-back" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $simple_video_learning_course->course_srl)}">
+                    ← 수업 목차로 돌아가기
+                </a>
+            </aside>
+        </section>
+    </main>
+</div>

@@ -1,0 +1,5 @@
+<query id="getCourseApiTokenByHash" action="select">
+    <tables><table name="simple_video_learning_course_api_tokens" /></tables>
+    <columns><column name="*" /></columns>
+    <conditions><condition operation="equal" column="token_hash" var="token_hash" notnull="notnull" /></conditions>
+</query>

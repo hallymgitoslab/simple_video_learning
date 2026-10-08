@@ -1,0 +1,232 @@
+<load target="./style.css" />
+
+<div class="simple_video_learning-shell" data-simple_video_learning-module-srl="{$module_info->module_srl}">
+    <header class="simple_video_learning-topbar">
+        <nav class="simple_video_learning-topnav" aria-label="Simple Video Learning 메뉴">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <a class="simple_video_learning-topnav-primary is-active" href="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningUpload')}">
+                <span>＋</span> 영상 업로드
+            </a>
+        </nav>
+    </header>
+
+    <main class="simple_video_learning-main">
+        <nav class="simple_video_learning-breadcrumb" aria-label="breadcrumb">
+            <a href="{getUrl('', 'mid', $simple_video_learning_mid)}">수업</a>
+            <span>›</span>
+            <strong>영상 업로드</strong>
+        </nav>
+
+        <section class="simple_video_learning-upload-layout">
+            <div class="simple_video_learning-upload-intro">
+                <span class="simple_video_learning-kicker">UPLOAD LECTURE</span>
+                <h1>새 강의 등록</h1>
+                <p>수업과 주차를 선택하고 학습 영상을 업로드하세요.</p>
+
+                <div class="simple_video_learning-upload-guide">
+                    <div>
+                        <span>01</span>
+                        <p><strong>수업 선택</strong><small>등록할 수업과 주차를 지정합니다.</small></p>
+                    </div>
+                    <div>
+                        <span>02</span>
+                        <p><strong>강의 정보</strong><small>제목과 설명을 입력합니다.</small></p>
+                    </div>
+                    <div>
+                        <span>03</span>
+                        <p><strong>영상 업로드</strong><small>영상 길이는 자동으로 인식됩니다.</small></p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="simple_video_learning-upload-card">
+                <div class="simple_video_learning-form-error" cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'simple_video_learning.upload'">{$XE_VALIDATOR_MESSAGE}</div>
+
+                <form action="./" method="post" enctype="multipart/form-data" id="simple_video_learningUploadForm">
+                    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+                    <input type="hidden" name="xe_validator_id" value="simple_video_learning.upload" />
+                    <input type="hidden" name="error_return_url" value="{getUrl('', 'mid', $simple_video_learning_mid, 'act', 'dispSimple_video_learningUpload')}" />
+                    <input type="hidden" name="mid" value="{$simple_video_learning_mid}" />
+                    <input type="hidden" name="act" value="procSimple_video_learningUpload" />
+                    <input type="hidden" name="duration" id="simple_video_learningDuration" value="0" />
+
+                    <div class="simple_video_learning-form-section">
+                        <div class="simple_video_learning-form-section-title">
+                            <span>1</span>
+                            <div><strong>수업 위치</strong><small>영상이 들어갈 수업과 주차</small></div>
+                        </div>
+
+                        <div class="simple_video_learning-field">
+                            <label for="course_srl">수업</label>
+                            <select name="course_srl" id="course_srl" required>
+                                <option value="">수업을 선택하세요</option>
+                                <option loop="$simple_video_learning_courses=>$course" value="{$course->course_srl}" data-sections="{$course->num_sections ? $course->num_sections : 15}">{$course->title}</option>
+                            </select>
+                        </div>
+
+                        <div class="simple_video_learning-form-row">
+                            <div class="simple_video_learning-field">
+                                <label for="week_no">주차</label>
+                                <select name="week_no" id="week_no" required disabled>
+                                    <option value="">먼저 수업을 선택하세요</option>
+                                </select>
+                            </div>
+                            <div class="simple_video_learning-field">
+                                <label for="sort_order">주차 내 순서</label>
+                                <input type="number" name="sort_order" id="sort_order" value="0" min="0" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="simple_video_learning-form-section">
+                        <div class="simple_video_learning-form-section-title">
+                            <span>2</span>
+                            <div><strong>강의 정보</strong><small>학습자에게 표시될 내용</small></div>
+                        </div>
+
+                        <div class="simple_video_learning-field">
+                            <label for="title">강의 제목</label>
+                            <input type="text" name="title" id="title" maxlength="250" placeholder="예: 생성형 AI의 이해" required />
+                        </div>
+
+                        <div class="simple_video_learning-field">
+                            <label for="description">강의 설명 <small>선택</small></label>
+                            <textarea name="description" id="description" rows="5" placeholder="강의에 대한 간단한 설명을 입력하세요."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="simple_video_learning-form-section">
+                        <div class="simple_video_learning-form-section-title">
+                            <span>3</span>
+                            <div><strong>영상 파일</strong><small>지원 포맷과 용량을 확인하세요</small></div>
+                        </div>
+
+                        <div class="simple_video_learning-field">
+                            <label class="simple_video_learning-upload-drop" for="video_file">
+                                <span class="simple_video_learning-upload-icon">↑</span>
+                                <strong>클릭해서 영상을 선택하세요</strong>
+                                <span>또는 파일을 이 영역에 놓으세요</span>
+                                <small>MP4 · WebM · M4V · MOV / 최대 약 {$simple_video_learning_effective_upload_mb}MB</small>
+                                <b id="simple_video_learningFileMeta"></b>
+                            </label>
+                            <input class="simple_video_learning-file-input" type="file" name="video_file" id="video_file" accept="video/mp4,video/webm,video/quicktime,.m4v,.mov" required />
+                        </div>
+                    </div>
+
+                    <div class="simple_video_learning-form-actions">
+                        <a href="{getUrl('', 'mid', $simple_video_learning_mid)}">취소</a>
+                        <button class="simple_video_learning-submit" type="submit">
+                            <span>강의 등록</span>
+                            <b>→</b>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </section>
+    </main>
+</div>
+
+<script>
+(function(){
+    var input = document.getElementById('video_file');
+    var duration = document.getElementById('simple_video_learningDuration');
+    var meta = document.getElementById('simple_video_learningFileMeta');
+    var form = document.getElementById('simple_video_learningUploadForm');
+    var course = document.getElementById('course_srl');
+    var week = document.getElementById('week_no');
+    var drop = document.querySelector('.simple_video_learning-upload-drop');
+    var maxBytes = {$simple_video_learning_effective_upload_bytes};
+    if (!input || !duration || !form || !course || !week) return;
+
+    function refreshWeeks() {
+        var selected = course.options[course.selectedIndex];
+        var count = selected ? parseInt(selected.getAttribute('data-sections') || '0', 10) : 0;
+        week.innerHTML = '<option value="">먼저 수업을 선택하세요</option>';
+        if (!course.value || count <= 0) {
+            week.disabled = true;
+            return;
+        }
+        week.options[0].textContent = '주차를 선택하세요';
+        for (var i = 1; i <= count; i++) {
+            var option = document.createElement('option');
+            option.value = String(i);
+            option.textContent = i + '주차';
+            week.appendChild(option);
+        }
+        week.disabled = false;
+    }
+
+    function readVideo(file) {
+        duration.value = '0';
+        meta.textContent = '';
+        if (!file) return;
+        if (maxBytes > 0 && file.size > maxBytes) {
+            meta.textContent = '파일이 서버 업로드 한도를 초과합니다.';
+            input.value = '';
+            return;
+        }
+
+        var video = document.createElement('video');
+        var objectUrl = URL.createObjectURL(file);
+        video.preload = 'metadata';
+        video.onloadedmetadata = function(){
+            var seconds = Math.max(1, Math.round(video.duration || 0));
+            duration.value = String(seconds);
+            var min = Math.floor(seconds / 60);
+            var sec = seconds % 60;
+            meta.textContent = '✓ ' + file.name + ' · ' + min + ':' + String(sec).padStart(2, '0');
+            URL.revokeObjectURL(objectUrl);
+        };
+        video.onerror = function(){
+            meta.textContent = '영상 정보를 읽을 수 없습니다.';
+            URL.revokeObjectURL(objectUrl);
+        };
+        video.src = objectUrl;
+    }
+
+    course.addEventListener('change', refreshWeeks);
+    refreshWeeks();
+
+    input.addEventListener('change', function(){
+        readVideo(input.files && input.files[0]);
+    });
+
+    if (drop) {
+        ['dragenter', 'dragover'].forEach(function(name) {
+            drop.addEventListener(name, function(e) {
+                e.preventDefault();
+                drop.classList.add('is-dragging');
+            });
+        });
+        ['dragleave', 'drop'].forEach(function(name) {
+            drop.addEventListener(name, function(e) {
+                e.preventDefault();
+                drop.classList.remove('is-dragging');
+            });
+        });
+        drop.addEventListener('drop', function(e) {
+            if (!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files[0]) return;
+            try {
+                var transfer = new DataTransfer();
+                transfer.items.add(e.dataTransfer.files[0]);
+                input.files = transfer.files;
+                readVideo(input.files[0]);
+            } catch (err) {
+                input.click();
+            }
+        });
+    }
+
+    form.addEventListener('submit', function(e){
+        if (!week.value) {
+            e.preventDefault();
+            alert('주차를 선택해 주세요.');
+            return;
+        }
+        if (parseInt(duration.value || '0', 10) <= 0) {
+            e.preventDefault();
+            alert('영상 정보를 읽을 때까지 기다리거나 파일을 다시 선택해 주세요.');
+        }
+    });
+})();
+</script>

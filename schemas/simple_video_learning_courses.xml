@@ -1,0 +1,12 @@
+<table name="simple_video_learning_courses">
+    <column name="course_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="course_code" type="varchar" size="80" notnull="notnull" unique="unique_course_code" />
+    <column name="title" type="varchar" size="250" notnull="notnull" />
+    <column name="description" type="bigtext" />
+    <column name="num_sections" type="number" size="3" default="15" notnull="notnull" />
+    <column name="enrollment_enabled" type="char" size="1" default="Y" notnull="notnull" index="idx_enrollment_enabled" />
+    <column name="enrollment_mode" type="varchar" size="20" default="auto" notnull="notnull" index="idx_enrollment_mode" />
+    <column name="is_published" type="char" size="1" default="Y" notnull="notnull" index="idx_is_published" />
+    <column name="regdate" type="date" index="idx_regdate" />
+    <column name="last_update" type="date" index="idx_last_update" />
+</table>

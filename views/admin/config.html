@@ -1,0 +1,103 @@
+<load target="./admin.css" />
+<div class="svl-admin">
+    <div class="svl-header">
+        <div>
+            <span class="svl-eyebrow">Simple Video Learning · Administration</span>
+            <h1>API 및 모듈 설정</h1>
+            <p>강의 API 인증, 저장 대상, 학습 완료 기준과 업로드 정책을 설정합니다.</p>
+        </div>
+        <a cond="$simple_video_learning_front_mid" class="x_btn svl-admin-launch" href="{getUrl('', 'mid', $simple_video_learning_front_mid)}" target="_blank" rel="noopener">학습자 화면 열기 ↗</a>
+    </div>
+    <ul class="svl-tabs">
+        <li class="is-active"|cond="$act === 'dispSimple_video_learningAdminConfig'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}">API · 기본 설정</a></li>
+        <li class="is-active"|cond="$act === 'dispSimple_video_learningAdminCourses'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리</a></li>
+        <li class="is-active"|cond="$act === 'dispSimple_video_learningAdminProgress'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress')}">수강생 · 진도</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminApiGuide'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminApiGuide')}">API 가이드</a></li>    </ul>
+    <section class="svl-card" aria-label="API 연결 정보">
+        <div class="svl-card-header"><h2>API 연결 정보</h2><p>외부 강의 생성 서비스에서 사용할 수 있는 API 접속 경로와 인증 방식을 확인합니다.</p></div>
+        <div class="svl-api-path">/modules/simple_video_learning/compat</div>
+        <div class="svl-meta">
+            <div><strong>인증 방식</strong><span>Bearer Token / Web Service Token</span></div>
+            <div><strong>지원 인터페이스</strong><span>Native JSON API · Moodle 호환 API</span></div>
+        </div>
+        <p class="x_help-block">연결 주소는 이 사이트의 도메인을 앞에 붙여 사용합니다. Moodle 호환 클라이언트는 위 경로를 기본 URL로 설정할 수 있습니다.</p>
+        <p class="x_help-block" cond="!$simple_video_learning_front_mid">사이트 메뉴 편집에서 Simple Video Learning 메뉴를 추가한 뒤 이러닝 MID를 확인하세요.</p>
+    </section>
+    <div class="x_alert x_alert-error" cond="$XE_VALIDATOR_MESSAGE">{$XE_VALIDATOR_MESSAGE}</div>
+<form action="./" method="post" class="x_form-horizontal svl-card">
+    <input type="hidden" name="module" value="admin" />
+    <input type="hidden" name="act" value="procSimple_video_learningAdminConfig" />
+    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+    <input type="hidden" name="xe_validator_id" value="simple_video_learning.admin.config" />
+    <input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}" />
+    <input type="hidden" name="error_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}" />
+
+    <div class="svl-card-header"><h2>기본 설정</h2><p>강의 저장 위치와 영상 학습 정책을 관리합니다.</p></div>
+    <div class="x_control-group">
+        <label class="x_control-label" for="api_token_display">{$lang->simple_video_learning_api_token}</label>
+        <div class="x_controls">
+            <div class="svl-token-line">
+                <input type="text" id="api_token_display" value="{$simple_video_learning_config->api_token_prefix|escape}" class="x_input-xxlarge" readonly="readonly" autocomplete="off" />
+            </div>
+            <p class="x_help-block">현재 전역 API 토큰의 식별자입니다. 원문은 저장하지 않으며 일반 설정 저장으로 토큰이 바뀌지 않습니다.</p>
+            <div cond="$simple_video_learning_new_global_api_token">
+                <label for="api_token_new">새 전역 API 토큰 — 이번 한 번만 표시됩니다</label>
+                <div class="svl-token-line">
+                    <input type="text" id="api_token_new" value="{$simple_video_learning_new_global_api_token|escape}" class="x_input-xxlarge" readonly="readonly" autocomplete="off" />
+                    <button type="button" class="x_btn" onclick="(function(){var el=document.getElementById('api_token_new');if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(el.value);}else{el.select();document.execCommand('copy');}})();">복사</button>
+                </div>
+                <p class="x_help-block">복사해서 안전하게 보관하세요. 이 화면을 다시 열면 원문을 조회할 수 없습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="x_control-group">
+        <label class="x_control-label" for="target_mid">{$lang->simple_video_learning_target_mid}</label>
+        <div class="x_controls">
+            <input type="text" id="target_mid" name="target_mid" value="{$simple_video_learning_config->target_mid|escape}" />
+            <p class="x_help-block">{$lang->simple_video_learning_mid_help}</p>
+        </div>
+    </div>
+
+    <div class="x_control-group">
+        <label class="x_control-label" for="author_name">{$lang->simple_video_learning_author_name}</label>
+        <div class="x_controls">
+            <input type="text" id="author_name" name="author_name" value="{$simple_video_learning_config->author_name|escape}" />
+        </div>
+    </div>
+
+    <div class="x_control-group">
+        <label class="x_control-label" for="default_threshold">{$lang->simple_video_learning_default_threshold}</label>
+        <div class="x_controls">
+            <input type="number" min="1" max="100" id="default_threshold" name="default_threshold" value="{$simple_video_learning_config->default_threshold}" />
+        </div>
+    </div>
+
+    <div class="x_control-group">
+        <label class="x_control-label" for="max_upload_mb">{$lang->simple_video_learning_max_upload_mb}</label>
+        <div class="x_controls">
+            <input type="number" min="1" max="10240" id="max_upload_mb" name="max_upload_mb" value="{$simple_video_learning_config->max_upload_mb}" />
+            <p class="x_help-block">{$lang->simple_video_learning_max_upload_help}</p>
+        </div>
+    </div>
+
+    <div class="svl-card-footer">
+        <button type="submit" class="x_btn x_btn-primary">{$lang->simple_video_learning_save}</button>
+    </div>
+</form>
+
+<form action="./" method="post" class="x_form-horizontal svl-card svl-danger" onsubmit="return confirm('전역 API 토큰을 재생성할까요? 기존 토큰을 사용하는 연동은 즉시 중단됩니다.');">
+    <input type="hidden" name="module" value="admin" />
+    <input type="hidden" name="act" value="procSimple_video_learningAdminRegenerateApiToken" />
+    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+    <input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}" />
+    <div class="svl-card-header"><h2>보안 및 토큰 재발급</h2><p>재발급 시 기존 전역 토큰은 즉시 무효화됩니다. 외부 연동 서비스를 먼저 확인하세요.</p></div>
+    <div class="x_control-group">
+        <label class="x_control-label">API 토큰 관리</label>
+        <div class="x_controls">
+            <button type="submit" class="x_btn x_btn-danger">전역 API 토큰 재생성</button>
+            <p class="x_help-block">필요한 경우에만 사용하세요. 재생성 즉시 기존 전역 토큰은 무효화됩니다.</p>
+        </div>
+    </div>
+</form>
+</div>

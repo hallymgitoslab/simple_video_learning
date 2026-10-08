@@ -1,0 +1,15 @@
+<table name="simple_video_learning_lectures">
+    <column name="lecture_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="external_id" type="varchar" size="191" notnull="notnull" unique="unique_external_id" />
+    <column name="module_srl" type="number" size="11" default="0" notnull="notnull" index="idx_module_srl" />
+    <column name="course_srl" type="number" size="11" default="0" notnull="notnull" index="idx_course_srl" />
+    <column name="week_no" type="number" size="3" default="1" notnull="notnull" index="idx_week_no" />
+    <column name="sort_order" type="number" size="6" default="0" notnull="notnull" />
+    <column name="uploader_srl" type="number" size="11" default="0" notnull="notnull" index="idx_uploader_srl" />
+    <column name="document_srl" type="number" size="11" notnull="notnull" unique="unique_document_srl" />
+    <column name="video_url" type="text" notnull="notnull" />
+    <column name="duration" type="number" size="11" default="0" notnull="notnull" />
+    <column name="completion_threshold" type="number" size="3" default="80" notnull="notnull" />
+    <column name="regdate" type="date" index="idx_regdate" />
+    <column name="last_update" type="date" index="idx_last_update" />
+</table>

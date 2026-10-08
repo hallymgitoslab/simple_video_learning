@@ -1,0 +1,15 @@
+<query id="insertCourseApiToken" action="insert">
+    <tables><table name="simple_video_learning_course_api_tokens" /></tables>
+    <columns>
+        <column name="token_srl" var="token_srl" filter="number" notnull="notnull" />
+        <column name="token_hash" var="token_hash" notnull="notnull" />
+        <column name="token_prefix" var="token_prefix" notnull="notnull" />
+        <column name="course_srl" var="course_srl" filter="number" notnull="notnull" />
+        <column name="label" var="label" />
+        <column name="created_by" var="created_by" filter="number" default="0" />
+        <column name="active" var="active" default="Y" />
+        <column name="last_used_at" var="last_used_at" />
+        <column name="regdate" var="regdate" />
+        <column name="last_update" var="last_update" />
+    </columns>
+</query>

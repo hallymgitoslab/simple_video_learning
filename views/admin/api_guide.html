@@ -1,0 +1,46 @@
+<load target="./admin.css" />
+<div class="svl-admin">
+ <div class="svl-header"><div><span class="svl-eyebrow">Simple Video Learning · Developer Docs</span><h1>API 가이드</h1><p>수업 준비부터 외부 영상 강의 등록까지, 실제 지원되는 API를 안내합니다.</p></div></div>
+ <ul class="svl-tabs">
+ <li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}">API · 기본 설정</a></li>
+ <li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리</a></li>
+ <li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress')}">수강생 · 진도</a></li>
+ <li class="is-active"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminApiGuide')}">API 가이드</a></li>
+ </ul>
+ <section class="svl-card"><div class="svl-card-header"><h2>1. 수업 먼저 생성하기</h2><p>현재 제공되는 Native API는 <strong>강의 등록·수정 API</strong>입니다. 수업 자체를 생성하는 API는 구현되어 있지 않습니다.</p></div>
+ <p>관리자 → 수업 관리 → 새 수업에서 <strong>수업 코드</strong>(예: AI101)와 수업명, 주차 수를 등록한 다음, 아래 요청에 수업 코드를 사용합니다.</p>
+ <a class="x_btn" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리 열기 ↗</a></section>
+ <section class="svl-card"><div class="svl-card-header"><h2>2. API 인증</h2><p>API · 기본 설정의 전역 토큰이나 수업 운영 화면에서 발급한 수업 전용 토큰을 사용합니다.</p></div>
+ <div class="svl-api-path">POST /?module=simple_video_learning&amp;act=procSimple_video_learningApiUpsertLecture</div>
+ <p class="x_help-block">HTTPS 환경에서 HTTP <code>Authorization: Bearer YOUR_TOKEN</code> 헤더를 전달합니다. 수업 전용 토큰은 발급된 수업에만 사용할 수 있습니다.</p></section>
+ <section class="svl-card"><div class="svl-card-header"><h2>3. 강의 등록 요청</h2><p>이미 존재하는 <code>course_code</code>를 지정하면 원하는 주차에 영상을 등록합니다. 같은 <code>external_id</code>를 다시 보내면 기존 강의를 갱신합니다.</p></div>
+ <pre class="svl-guide-code"><code>curl -X POST 'https://YOUR-DOMAIN/?module=simple_video_learning&amp;act=procSimple_video_learningApiUpsertLecture' \
+  -H 'Authorization: Bearer YOUR_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "external_id": "cloud-lecture-03",
+    "course_code": "AI101",
+    "sectionnum": 3,
+    "sort_order": 1,
+    "title": "클라우드 개요",
+    "content": "3주차 강의입니다.",
+    "video_url": "https://cdn.example.com/cloud-week3.mp4",
+    "duration": 900,
+    "completion_threshold": 80
+  }'</code></pre>
+ <p class="x_help-block">필수: <code>external_id</code>, <code>title</code>, <code>video_url</code> 및 수업 식별자(<code>course_code</code> 또는 <code>course_srl</code>). <code>video_url</code>은 HTTP(S) URL이어야 합니다. <code>sectionnum</code> 기본값은 1입니다. URL은 서버로 영상을 직접 업로드하는 방식이 아니라 영상 주소를 등록하는 방식입니다.</p>
+ </section>
+ <section class="svl-card"><div class="svl-card-header"><h2>4. 등록 결과 확인</h2><p>성공하면 문서 번호와 강의 화면 주소가 반환됩니다.</p></div><pre class="svl-guide-code"><code>{
+  "success": true,
+  "external_id": "cloud-lecture-03",
+  "platform_id": 12345,
+  "document_srl": 12345,
+  "url": "https://YOUR-DOMAIN/...",
+  "created": true
+}</code></pre><p class="x_help-block">위 응답은 필드 구조를 보여주는 예시입니다. 실제 번호·URL은 요청에 따라 달라집니다. 조회는 <code>GET /?module=simple_video_learning&amp;act=dispSimple_video_learningApiLecture&amp;external_id=cloud-lecture-03</code> 및 동일한 Bearer 토큰을 사용합니다.</p></section>
+ <section class="svl-card"><div class="svl-card-header"><h2>5. Moodle 호환 연동</h2><p>기존 Moodle 방식 클라이언트를 위한 별도 호환 인터페이스입니다.</p></div>
+ <div class="svl-api-path">/modules/simple_video_learning/compat</div>
+ <p>지원 함수: <code>core_enrol_get_users_courses</code>, <code>core_course_get_contents</code>, <code>mod_simplevideotracker_create_activity</code>, <code>mod_simplevideotracker_set_video</code> 등.</p>
+ <p>활동 생성 시 <code>courseid</code> 및 <code>sectionnum</code>(또는 <code>week_no</code>, <code>week</code>, <code>section</code>)으로 수업과 주차를 지정합니다. <code>sectionnum=3</code>이면 3주차에 강의를 배정합니다. 영상 파일 전송은 별도의 호환 업로드 엔드포인트를 이용합니다.</p></section>
+ <section class="svl-card"><div class="svl-card-header"><h2>오류 확인</h2></div><div class="svl-guide-errors"><div><strong>401</strong><span>Bearer 토큰 누락 또는 인증 실패</span></div><div><strong>403</strong><span>수업 전용 토큰으로 다른 수업 접근</span></div><div><strong>422</strong><span>필수 입력 누락·유효하지 않은 수업 코드·영상 URL</span></div><div><strong>503</strong><span>강의를 저장할 이러닝 메뉴를 찾지 못함</span></div></div></section>
+</div>

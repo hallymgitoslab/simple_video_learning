@@ -1,0 +1,15 @@
+<query id="insertEnrollment" action="insert">
+    <tables><table name="simple_video_learning_enrollments" /></tables>
+    <columns>
+        <column name="enrollment_srl" var="enrollment_srl" filter="number" notnull="notnull" />
+        <column name="enrollment_key" var="enrollment_key" notnull="notnull" />
+        <column name="course_srl" var="course_srl" filter="number" notnull="notnull" />
+        <column name="member_srl" var="member_srl" filter="number" notnull="notnull" />
+        <column name="active" var="active" default="Y" />
+        <column name="status" var="status" default="approved" />
+        <column name="decision_by" var="decision_by" filter="number" default="0" />
+        <column name="decision_at" var="decision_at" />
+        <column name="regdate" var="regdate" />
+        <column name="last_update" var="last_update" />
+    </columns>
+</query>

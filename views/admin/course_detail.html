@@ -1,0 +1,64 @@
+<load target="./admin.css" />
+<div class="svl-admin">
+<div class="svl-header"><div><span class="svl-eyebrow">Simple Video Learning · Administration</span><h1>수업 상세 관리</h1><p>수업 속성과 교수·조교 운영 권한을 관리합니다.</p></div></div>
+<ul class="svl-tabs">
+<li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}">API · 기본 설정</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminCourses' || $act === 'dispSimple_video_learningAdminCourseCreate' || $act === 'dispSimple_video_learningAdminCourseDetail' || $act === 'dispSimple_video_learningAdminLectureAssignments'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리</a></li>
+<li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress')}">수강생 · 진도</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminApiGuide'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminApiGuide')}">API 가이드</a></li></ul>
+<nav class="svl-course-nav" aria-label="수업 관리 메뉴"><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 목록</a><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourseCreate')}">+ 새 수업</a><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminLectureAssignments')}">강의 배정</a></nav>
+
+<div loop="$simple_video_learning_courses=>$course" cond="$course->course_srl == $simple_video_learning_selected_course_srl" class="svl-detail-layout">
+<section class="svl-card svl-detail-main">
+  <div class="svl-card-header"><span class="svl-eyebrow">COURSE SETTINGS</span><h2>수업 기본 정보</h2><p>수업명, 수강 방식 및 주차 구성을 관리합니다.</p></div>
+  <form action="./" method="post" class="svl-detail-form">
+    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" /><input type="hidden" name="module" value="admin" />
+    <input type="hidden" name="act" value="procSimple_video_learningAdminSaveCourse" />
+    <input type="hidden" name="course_srl" value="{$course->course_srl}" />
+    <input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourseDetail', 'course_srl', $course->course_srl)}" />
+    <div class="svl-field-grid">
+      <div class="svl-field"><label for="svl_course_code">수업 코드</label><input id="svl_course_code" type="text" name="course_code" value="{$course->course_code|escape}" required="required" /></div>
+      <div class="svl-field"><label for="svl_sections">주차 수</label><input id="svl_sections" type="number" name="num_sections" min="1" max="99" value="{$course->num_sections ? $course->num_sections : 15}" required="required" /></div>
+      <div class="svl-field svl-field-full"><label for="svl_title">수업명</label><input id="svl_title" type="text" name="title" value="{$course->title|escape}" required="required" /></div>
+      <div class="svl-field svl-field-full"><label for="svl_description">수업 설명</label><textarea id="svl_description" name="description" rows="4">{$course->description|escape}</textarea></div>
+      <div class="svl-field"><label for="svl_enrollment_mode">수강 방식</label><select id="svl_enrollment_mode" name="enrollment_mode"><option value="open" selected="selected"|cond="$course->enrollment_mode === 'open' || (!$course->enrollment_mode && $course->enrollment_enabled === 'N')">오픈 수업</option><option value="auto" selected="selected"|cond="$course->enrollment_mode === 'auto' || (!$course->enrollment_mode && $course->enrollment_enabled !== 'N')">자동 승인</option><option value="approval" selected="selected"|cond="$course->enrollment_mode === 'approval'">승인 필요</option><option value="closed" selected="selected"|cond="$course->enrollment_mode === 'closed'">닫힘</option></select></div>
+      <div class="svl-field"><label for="svl_publish">공개 상태</label><select id="svl_publish" name="is_published"><option value="Y" selected="selected"|cond="$course->is_published === 'Y'">공개</option><option value="N" selected="selected"|cond="$course->is_published === 'N'">비공개</option></select></div>
+    </div>
+    <div class="svl-detail-actions"><a cond="$simple_video_learning_front_mid" class="x_btn" href="{getUrl('', 'mid', $simple_video_learning_front_mid, 'act', 'dispSimple_video_learningCourse', 'course_srl', $course->course_srl)}" target="_blank" rel="noopener">학습자 화면 ↗</a><button type="submit" class="x_btn x_btn-primary">변경사항 저장</button></div>
+  </form>
+</section>
+<aside class="svl-detail-side">
+  <section class="svl-card">
+    <div class="svl-card-header"><span class="svl-eyebrow">COURSE TEAM</span><h2>수업 운영자</h2><p>담당 교수 및 조교를 관리합니다.</p></div>
+    {@ $course_roles = isset($simple_video_learning_roles_by_course[$course->course_srl]) ? $simple_video_learning_roles_by_course[$course->course_srl] : array(); }
+    <div class="svl-team-list">
+      <div class="svl-team-member" loop="$course_roles=>$role_row">
+        <div class="svl-team-avatar">{mb_substr($role_row->member->nick_name, 0, 1)}</div>
+        <div class="svl-team-info"><strong>{$role_row->member->nick_name|escape}</strong><small>{$role_row->member->user_id|escape} · {$role_row->role === 'teacher' ? '교수' : '조교'}</small></div>
+        <form action="./" method="post" onsubmit="return confirm('운영자 권한을 해제할까요?');">
+          <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" /><input type="hidden" name="module" value="admin" /><input type="hidden" name="act" value="procSimple_video_learningAdminRemoveCourseRole" /><input type="hidden" name="course_srl" value="{$course->course_srl}" /><input type="hidden" name="member_srl" value="{$role_row->member_srl}" /><input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourseDetail', 'course_srl', $course->course_srl)}" /><button class="x_btn x_btn-small" type="submit">해제</button>
+        </form>
+      </div>
+      <p cond="!$course_roles" class="svl-muted">배정된 운영자가 없습니다.</p>
+    </div>
+    <div class="svl-team-add">
+      <strong>운영자 추가</strong>
+      <form action="./" method="post">
+        <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" /><input type="hidden" name="module" value="admin" /><input type="hidden" name="act" value="procSimple_video_learningAdminAssignCourseRole" /><input type="hidden" name="course_srl" value="{$course->course_srl}" /><input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourseDetail', 'course_srl', $course->course_srl)}" />
+        <label for="svl_user_id">회원 ID</label><input id="svl_user_id" name="user_id" type="text" placeholder="회원 ID 입력" required="required" />
+        <label for="svl_role">역할</label><select id="svl_role" name="role"><option value="teacher">교수</option><option value="assistant">조교</option></select>
+        <button type="submit" class="x_btn x_btn-primary svl-add-button">운영자 배정</button>
+      </form>
+    </div>
+  </section>
+  <section class="svl-card svl-delete-card">
+    <div class="svl-card-header"><h2>수업 삭제</h2><p>강의가 연결된 수업은 삭제할 수 없습니다.</p></div>
+    <form action="./" method="post" onsubmit="return confirm('이 수업을 삭제하시겠습니까?');">
+      <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" /><input type="hidden" name="module" value="admin" /><input type="hidden" name="act" value="procSimple_video_learningAdminDeleteCourse" /><input type="hidden" name="course_srl" value="{$course->course_srl}" /><input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}" />
+      <button type="submit" class="x_btn x_btn-danger">수업 삭제</button>
+    </form>
+  </section>
+</aside>
+</div>
+<div class="svl-card svl-empty" cond="!$simple_video_learning_selected_course_srl">수업 목록에서 수업을 선택하세요.</div>
+</div>

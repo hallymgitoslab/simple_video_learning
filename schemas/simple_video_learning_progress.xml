@@ -1,0 +1,13 @@
+<table name="simple_video_learning_progress">
+    <column name="progress_srl" type="number" size="11" notnull="notnull" primary_key="primary_key" />
+    <column name="progress_key" type="varchar" size="80" notnull="notnull" unique="unique_progress_key" />
+    <column name="document_srl" type="number" size="11" notnull="notnull" index="idx_document_srl" />
+    <column name="member_srl" type="number" size="11" notnull="notnull" index="idx_member_srl" />
+    <column name="watched_ranges" type="bigtext" notnull="notnull" />
+    <column name="watched_seconds" type="number" size="11" default="0" notnull="notnull" />
+    <column name="frontier" type="number" size="11" default="0" notnull="notnull" />
+    <column name="last_position" type="number" size="11" default="0" notnull="notnull" />
+    <column name="completed" type="char" size="1" default="N" notnull="notnull" index="idx_completed" />
+    <column name="last_heartbeat" type="date" index="idx_last_heartbeat" />
+    <column name="regdate" type="date" index="idx_regdate" />
+</table>

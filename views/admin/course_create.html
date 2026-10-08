@@ -1,0 +1,54 @@
+<load target="./admin.css" />
+<div class="svl-admin">
+<div class="svl-header"><div><span class="svl-eyebrow">Simple Video Learning · Administration</span><h1>새 수업 생성</h1><p>기본 정보를 입력해 수업을 개설합니다.</p></div></div>
+<ul class="svl-tabs">
+<li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminConfig')}">API · 기본 설정</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminCourses' || $act === 'dispSimple_video_learningAdminCourseCreate' || $act === 'dispSimple_video_learningAdminCourseDetail' || $act === 'dispSimple_video_learningAdminLectureAssignments'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 관리</a></li>
+<li><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminProgress')}">수강생 · 진도</a></li>
+<li class="is-active"|cond="$act === 'dispSimple_video_learningAdminApiGuide'"><a href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminApiGuide')}">API 가이드</a></li></ul>
+<nav class="svl-course-nav" aria-label="수업 관리 메뉴"><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}">수업 목록</a><a class="is-active" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourseCreate')}">+ 새 수업</a><a class="" href="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminLectureAssignments')}">강의 배정</a></nav>
+<section class="svl-card svl-editor"><div class="svl-card-header"><h2>수업 기본 정보</h2><p>수업을 생성한 뒤 운영자 배정과 강의 구성을 설정할 수 있습니다.</p></div>
+<form action="./" method="post" class="x_form-horizontal svl-course-form">
+    <input type="hidden" name="_rx_csrf_token" value="{$simple_video_learning_csrf_token}" />
+    <input type="hidden" name="module" value="admin" />
+    <input type="hidden" name="act" value="procSimple_video_learningAdminSaveCourse" />
+    <input type="hidden" name="success_return_url" value="{getUrl('', 'module', 'admin', 'act', 'dispSimple_video_learningAdminCourses')}" />
+
+    <div class="x_control-group">
+        <label class="x_control-label">수업 코드</label>
+        <div class="x_controls"><input type="text" name="course_code" placeholder="AI101" required /></div>
+    </div>
+    <div class="x_control-group">
+        <label class="x_control-label">수업명</label>
+        <div class="x_controls"><input type="text" name="title" class="x_input-xxlarge" required /></div>
+    </div>
+    <div class="x_control-group">
+        <label class="x_control-label">설명</label>
+        <div class="x_controls"><textarea name="description" rows="3" class="x_input-xxlarge"></textarea></div>
+    </div>
+    <div class="x_control-group">
+        <label class="x_control-label">섹션 수</label>
+        <div class="x_controls">
+            <input type="number" name="num_sections" value="15" min="1" max="99" style="width:90px" />
+            <p class="x_help-block">예: 15 → 1주차~15주차가 자동으로 존재합니다.</p>
+        </div>
+    </div>
+    <div class="x_control-group">
+        <label class="x_control-label">수강 방식</label>
+        <div class="x_controls">
+            <select name="enrollment_mode">
+                <option value="open">오픈 수업 - 로그인 즉시 학습</option>
+                <option value="auto" selected="selected">자가 수강신청 - 자동 승인</option>
+                <option value="approval">자가 수강신청 - 교수/조교 승인</option>
+                <option value="closed">닫힘 - 운영자 수동 등록만</option>
+            </select>
+        </div>
+    </div>
+    <div class="x_control-group">
+        <label class="x_control-label">공개</label>
+        <div class="x_controls"><select name="is_published"><option value="Y">공개</option><option value="N">비공개</option></select></div>
+    </div>
+    <div class="btnArea"><button class="x_btn x_btn-primary" type="submit">수업 생성</button></div>
+</form>
+
+</section></div>
